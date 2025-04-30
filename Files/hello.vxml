@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1">
+    <form>
+        <block>
+            <prompt>
+                Willkommen zum interaktiven Escape Room!
+                <break time="1s"/>
+                Bitte wähle eine der folgenden Optionen:
+                <break time="1s"/>
+                Drücke 1 für das Jungel Erlebnis.
+                <break time="1s"/>
+                Drücke 2 für das Unterwasser Abenteuer.
+                <break time="1s"/>
+                Drücke 3 für das Weltraum Erlebnis.
+                <break time="1s"/>
+                Drücke 4 für ein Fantasy Abenteuer.
+            </prompt>
+        </block>
+        <!-- Pause, um dem Benutzer Zeit zu geben -->
+        <block>
+            <prompt>
+                <break time="3s"/>
+            </prompt>
+        </block>
+        <field name="escaperoomtyp" type="digits">
+            <prompt>Bitte wähle eine Option.</prompt>
+            <catch event="noinput">
+                <prompt>Keine Eingabe erkannt. Bitte wähle eine Zahl zwischen 1 und 4.</prompt>
+                <reprompt/>
+            </catch>
+            <catch event="nomatch">
+                <prompt>Ungültige Eingabe. Bitte wähle eine Zahl zwischen 1 und 4.</prompt>
+                <reprompt/>
+            </catch>
+        </field>
+        <filled>
+            <if cond="escaperoomtyp == '1'">
+                <goto next="jungel.vxml"/>
+            </if>
+            <if cond="escaperoomtyp == '2'">
+                <goto next="unterwasser.vxml"/>
+            </if>
+            <if cond="escaperoomtyp == '3'">
+                <goto next="weltraum.vxml"/>
+            </if>
+            <if cond="escaperoomtyp == '4'">
+                <goto next="fantasy.vxml"/>
+            </if>
+            <if cond="true">
+                <prompt>Ungültige Eingabe. Bitte wähle eine Zahl zwischen 1 und 4.</prompt>
+                <reprompt/>
+            </if>
+        </filled>
+    </form>
+</vxml>

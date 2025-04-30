@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<vxml version="2.0">
+<form id="auswahl">
+<field name="gebiet">
+<prompt> Wahlen Sie eines der nachfolgenden Gebiete aus <enumerate/>
+</prompt>
+<option value="formal">
+Mathematik
+</option>
+<option value="praktisch">
+Programmierung
+</option>
+<option value="theoretisch">
+Linguistik
+</option>
+<filled>
+<prompt> Sie sind anscheinend <value expr="gebiet"/> interessiert
+</prompt>
+</filled>
+</field>
+</form>
+</vxml>
