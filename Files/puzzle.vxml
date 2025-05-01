@@ -26,7 +26,15 @@
       <prompt>
         What would you like to inspect? You can say: table, paintings, bookshelf, or the door. 
         You may also say "memory" to recall what you've seen.
+        <break time = "4s"/>
       </prompt>
+      
+
+       <option value="table">table</option>
+      <option value="paintings">paintings</option> 
+       <option value="bookshelf">bookshelf</option>
+      <option value="door">door</option> 
+      <option value="memory">memory</option> 
 
       <filled>
         <if cond="choice == 'table'">
@@ -59,7 +67,7 @@
     <block>
       <assign name="errorCount" expr="errorCount + 1"/>
       <if cond="errorCount &lt; 3">
-        <prompt>Please say: table, paintings, bookshelf, door, or memory.</prompt>
+        <prompt>Please say: table, paintings, bookshelf, door, or memory. <break time = "4s"/></prompt>
         <goto next="#mainChoice"/>
       <else/>
         <prompt>You grow silent... and time stands still.</prompt>
@@ -84,8 +92,14 @@
   <form id="paintingOverview">
     <field name="paintingPick">
       <prompt>
-        You see three paintings. Do you want to look at the east, north, or west wall?
+        You see three paintings. Do you want to look at the east, north, or west wall? Or do you want to look at something else in the room?<break time = "4s"/>
       </prompt>
+
+      <option value="east">east</option> 
+       <option value="north">north</option>
+      <option value="west">west</option> 
+      <option value="room">room</option> 
+      <option value="memory">memory</option> 
 
       <filled>
         <if cond="paintingPick == 'east'">
@@ -94,22 +108,30 @@
             His posture is proud, his jaw square, and his eyes tired but stern. 
             A heavy crown rests upon his head, and beneath the frame is etched: 
             "King Alric". Scrawled faintly in the corner is the number 4.
+            <break time = "8s"/>
           </prompt>
-          <goto next="#mainChoice"/>
+          <goto next="#paintingOverview"/>
         <elseif cond="paintingPick == 'north'"/>
           <prompt>
             Hanging on the north wall is a portrait of a regal woman. 
             She wears a deep violet gown, her hair wrapped in braids like coiled snakes. 
             One hand rests on a scroll, the other on the hilt of a jeweled dagger. 
             The inscription reads: "Queen Berena". A number 9 is delicately painted into her necklace.
+            <break time = "8s"/>
           </prompt>
-          <goto next="#mainChoice"/>
+          <goto next="#paintingOverview"/>
         <elseif cond="paintingPick == 'west'"/>
           <prompt>
             The painting on the west wall depicts a young nobleman with tousled blond hair. 
             He smiles slightly, a falcon perched confidently on his gloved arm. 
             He wears a green hunting cloak and boots muddy from the field. 
             Below him is labeled: "Prince Cedric", and the number 2 is sewn into the falcon's jess.
+            <break time = "8s"/>
+          </prompt>
+          <goto next="#paintingOverview"/>
+          <elseif cond="paintingPick == 'room'"/>
+          <prompt>
+            You turn your attention back to the room.
           </prompt>
           <goto next="#mainChoice"/>
         <elseif cond="paintingPick == 'memory'"/>
@@ -136,21 +158,34 @@
     <field name="bookPick">
       <prompt>
         There are three books here: "Cooking for Nobles", "Legends of the Realm", and "Royal Bloodlines".
-        Which do you want to look at?
+        Which do you want to look at? Or do you want to focus your attention on something else in the room?
+        <break time = "4s"/>
       </prompt>
+
+    <option value="cooking for nobles">cooking for nobles</option> 
+       <option value="legends of the realm">legends of the realm</option>
+      <option value="royal bloodlines">royal bloodlines</option> 
+      <option value="room">room</option> 
+      <option value="memory">memory</option> 
 
       <filled>
         <if cond="bookPick == 'cooking for nobles'">
-          <prompt>A delightful book of feasts and sauces... but nothing helpful.</prompt>
-          <goto next="#mainChoice"/>
+          <prompt>A delightful book of feasts and sauces... but nothing helpful.<break time = "4s"/></prompt>
+          <goto next="#inspectBookshelf"/>
         <elseif cond="bookPick == 'legends of the realm'"/>
-          <prompt>Exciting stories, but no information about your puzzle.</prompt>
-          <goto next="#mainChoice"/>
+          <prompt>Exciting stories, but no information about your puzzle.<break time = "4s"/></prompt>
+          <goto next="#inspectBookshelf"/>
         <elseif cond="bookPick == 'royal bloodlines'"/>
           <prompt>
             You read through the pages. It says: King Alric reigned first, followed by his daughter Queen Berena, and finally her son Prince Cedric.
+            <break time = "4s"/>
           </prompt>
           <assign name="knowsOrder" expr="true"/>
+          <goto next="#inspectBookshelf"/>
+        <elseif cond="bookPick == 'room'"/>
+          <prompt>
+            You turn your attention back to the room.
+          </prompt>
           <goto next="#mainChoice"/>
         <elseif cond="bookPick == 'memory'"/>
           <goto next="#recallMemory"/>
@@ -187,11 +222,14 @@
     <field name="codeInput">
       <prompt>
         The number padlock awaits. Say the three-digit code now.
-        Or say "memory" to recall what you’ve seen.
+        Or say "memory" to recall what you’ve seen.<break time = "8s"/>
       </prompt>
 
+      <option value="492">492</option> 
+      <option value="memory">memory</option> 
+
       <filled>
-        <if cond="codeInput == '492' and knowsOrder == true">
+        <if cond="codeInput == '492'">
           <prompt>
             You enter the code: 4, 9, 2... The lock beeps and clicks open.
             The door creaks ajar, and beyond it lies your freedom.
@@ -199,6 +237,11 @@
           </prompt>
           <assign name="codeKnown" expr="true"/>
           <exit/>
+          <elseif cond="codeInput == 'room'"/>
+          <prompt>
+            You turn your attention back to the room.
+          </prompt>
+          <goto next="#mainChoice"/>
         <elseif cond="codeInput == 'memory'"/>
           <goto next="#recallMemory"/>
         <else/>
