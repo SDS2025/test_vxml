@@ -3,6 +3,7 @@
   <property name="timeout" value="20s"/>
 
   <!-- Global Variables -->
+
   <var name="errorCount" expr="0"/>
   <var name="knowsOrder" expr="false"/>
   <var name="codeKnown" expr="false"/>
@@ -12,6 +13,7 @@
   <var name="mem_east" expr="false"/>
 
   <!-- Entry Point -->
+
   <form id="entry">
     <block>
       <prompt>You enter a grand room lit by flickering torches.</prompt>
@@ -26,29 +28,24 @@
   <catch event="quitEvent"> <exit/>
   </catch>
 
-  <menu id="mainChoice" dtmf="true">
+  <menu id="mainChoice">
     <prompt timeout="10s">What would you like to inspect? <enumerate /></prompt>
 
-    <choice next="#inspectTable">table</choice>
-    <choice next="#paintingOverview">paintings</choice>
-    <choice next="#inspectBookshelf">bookshelf</choice>
-    <choice next="#checkDoor">door</choice>
-    <choice next="#recallMemory">memory</choice>
+    <choice next="#inspectTable">Table</choice>
+    <choice next="#paintingOverview">Paintings</choice>
+    <choice next="#inspectBookshelf">Bookshelf</choice>
+    <choice next="#checkDoor">Door</choice>
+    <choice next="#recallMemory">Memory</choice>
     <choice event="quitEvent">quit</choice>
 
-    <noinput count="3">
+    <catch event="noinput nomatch" count="3">
       You grow silent... and time stands still.
       <exit/>
-    </noinput>
-
-    <nomatch count="3">
-      You grow silent... and time stands still.
-      <exit/>
-    </nomatch>
+    </catch>
   </menu>
 
   <!-- Table -->
-  
+
   <form id="inspectTable">
     <block>
       <prompt>
@@ -60,7 +57,7 @@
     </block>
   </form>
 
-<!-- Paintings -->
+  <!-- Paintings -->
 
   <menu id="paintingOverview">
     <prompt>
@@ -69,7 +66,8 @@
     <choice event="user.chose_painting_east" message="east">east</choice>
     <choice event="user.chose_painting_north" message="north">north</choice>
     <choice event="user.chose_painting_west" message="west">west</choice>
-    <choice next="#recallMemory">memory</choice>
+    <choice next="#recallMemory">Memory</choice>
+    <choice next="#mainChoice">Room</choice>
 
     <noinput>
       <prompt>Say east, north, west - or memory.<break time = "4s"/></prompt>
@@ -112,6 +110,7 @@
   <!-- Paintings End -->
 
   <!-- Bookshelf -->
+
   <form id="inspectBookshelf">
     <field name="bookPick">
       <prompt>
@@ -119,11 +118,11 @@
         Which do you want to look at? Or do you want to focus your attention on something else in the room?
       </prompt>
 
-    <option value="cooking for nobles">cooking for nobles</option> 
-       <option value="legends of the realm">legends of the realm</option>
-      <option value="royal bloodlines">royal bloodlines</option> 
-      <option value="room">room</option> 
-      <option value="memory">memory</option> 
+      <option value="cooking for nobles">Cooking for Nobles</option>
+      <option value="legends of the realm">Legends of the Realm</option>
+      <option value="royal bloodlines">Royal Bloodlines</option>
+      <option value="room">Room</option>
+      <option value="memory">Memory</option> 
 
       <filled>
         <if cond="bookPick == 'cooking for nobles'">
@@ -178,8 +177,68 @@
     </block>
   </form>
 
-  <!-- Check Door -->
+  <!-- Check Door Pin -->
+
   <form id="checkDoor">
+    <field name="codeInput">
+
+      <grammar src="picture_lock.grxml" type="application/grammar-xml" root="ORDER" />
+
+      <prompt>
+        The number padlock awaits. Say the three-digit code now.
+        Alternatively, say: <enumerate/>
+        <!-- Or say "memory" to recall what you've seen. -->
+      </prompt>
+      <option value="memory">Memory</option> 
+      <option value="room">Room</option> 
+
+      <filled>
+        <!-- <value expr="codeInput.split(' ').join(',')"/> -->
+        <!-- <value expr="codeInput"/>
+        <value expr="codeInput$.interpretation"/>
+        <value expr="application.lastresult$.interpretation"/> -->
+        <if cond="codeInput == 'chickenDinner'">
+          <prompt>You enter the code: 4, 9, 2... The lock beeps and clicks open.</prompt>
+          <prompt>The door creaks ajar, and beyond it lies your freedom.</prompt>
+          
+          <prompt>Well done, adventurer.</prompt>
+          <exit/>
+        <elseif cond="codeInput == 'permut'"/>
+          <prompt>You are sure these must be the correct numbers, but maybe the order is wrong?</prompt>
+          <prompt>Try checking the room again for more clues.</prompt>
+          <goto next="#checkDoor"/>
+        <elseif cond="codeInput == 'memory'"/>
+          <goto next="#recallMemory"/>
+        <elseif cond="codeInput == 'room'"/>
+          <prompt>You turn your attention back to the room.</prompt>
+          <goto next="#mainChoice"/>
+        <else/>
+          <prompt>The lock buzzes angrily. That's not the right code.</prompt>
+          <goto next="#mainChoice"/>
+        </if>
+      </filled>
+    </field>
+
+    <noinput>
+      <prompt>Say the three-digit code or say memory.</prompt>
+      <reprompt/>
+    </noinput>
+
+    <nomatch>
+      <prompt>This was not the correct code. The lock buzzes angrily. Maybe try remembering what you have learned so far, or try again.</prompt>
+      <if cond="(mem_west &amp; mem_north &amp; mem_east)">
+        <prompt>Three numbers.. that sure sounds familiar.</prompt>
+        <goto next="#checkDoor"/>
+      <else/>
+        <goto next="#mainChoice"/>
+      </if>
+      <reprompt/>
+    </nomatch>
+
+  </form>
+
+  <!-- Check Door -->
+  <!-- <form id="checkDoorold">
     <field name="codeInput">
       <prompt>
         The number padlock awaits. Say the three-digit code now.
@@ -237,6 +296,6 @@
         <reprompt/>
       </nomatch>
     </field>
-  </form>
+  </form> -->
 
 </vxml>
