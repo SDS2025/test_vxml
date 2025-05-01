@@ -227,11 +227,10 @@
   <form id="freedom">
     <block>
       <prompt>
-        You walk to the right. The air grows fresher.
-        Light spills in through a crack, an exit! You step into the sun. You are free.
-        Well done, adventurer.
+        You walk to the right. You see another door, similar to the one you just went through. 
+        As you open it and step through it, you see a second room. 
       </prompt>
-      <exit/>
+      <goto next = "puzzle.vxml"/>
     </block>
   </form>
 
