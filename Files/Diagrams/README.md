@@ -148,76 +148,91 @@ flowchart LR
 
 flowchart LR
 
-  A[Entry Point]
-  subgraph Start
+  A[Entry Point] 
+  A@{ shape: circle }
     B[Main Choice Menu]
-  end
     G[Recall Memory]
     G --> B
   A --> B
-
-  subgraph Exploration
-    B <==> C[Inspect Table]
+B e3@<==> C
+B e2@==> D
+B e1@==> E
+B e5@==> F
+%%   subgraph Exploration
+    C[Inspect Table<br>_no clues_]
     %% C --> B
 
     subgraph Paintings
-    B ==> D[Painting Overview]
+    Eretp[Return to Menu]
+    D[Painting Overview]
     D --> D1[Choose Painting]
 
     D1 --> D2[East Wall - King Alric, 4]
-    D2 -->|Set mem_east = true| D
+    D2 -->D12[Set mem_east = true] --> Eretp
 
     D1 --> D3[North Wall - Queen Berena, 9]
-    D3 -->|Set mem_north = true| D
+    D3 -->D11[Set mem_north = true] -->Eretp
 
     D1 --> D4[West Wall - Prince Cedric, 2]
-    D4 -->|Set mem_west = true| D
-    D1 --> B
+    D4 --> D10[Set mem_west = true] -->Eretp
+    Eretp e7@-.-> D
+    %% D1 --> B
     end
 
     subgraph Bookshelf
-        B ==> E[Inspect Bookshelf]
+        Eret[Return to Menu]
+        E[Inspect Bookshelf]
         E --> E1[Choose Book]
 
-        E1 --> E2[Cooking for Nobles - no clue]
-        E2 --> E
+        E1 --> E2[Cooking for Nobles<br>_no clue_]
+        E2 --> E11[_no clue_] --> Eret
 
-        E1 --> E3[Legends of the Realm - no clue]
-        E3 --> E
+        E1 --> E3[Legends of the Realm<br>_no clue_]
+        E3 --> E12[_no clue_] -->Eret
 
-        E1 --> E4[Royal Bloodlines - set knowsOrder = true]
-        E4 --> E
+        E1 --> E4[Royal Bloodlines]
+        E4 -->E10[set knowsOrder = true]--> Eret
+        Eret e8@-.-> E        
 
         %% E1 --> B
     end
-	linkStyle 2 stroke:red
-	linkStyle 3 stroke:red
-	linkStyle 12 stroke:red
-  end
-    D1 -.-> G
-    E1 -.-> G
+%%   end
+    D -.-> G
+    E -.-> G
 
 
   subgraph Door Puzzle
-    B ==> F[Check Door]
-    F --> F1[Say Code]
+    F[Check Door]
+    F --> F1[Enter Code]
 
     F1 --> F2[Code is 4 9 2  - Success]
 
-    F1 --> F3[Code is wrong order or permut - Retry]
-    F3 --> F
+    F1 --> F3[Code _order_ is wrong]
+    F3 --> F11
 
-    F1 --> F4[Incorrect Code]
-    F4 -->|If mem_east, mem_north, mem_west all true| F
-    F4 -->|Else| B
-	linkStyle 22 stroke:red
+    F1 --> F4[Incorrect Code<br>_doesn't contain 2,4,9_]
+    F4 -->F10{mem_east<br>mem_north<br>mem_west<br>all true} --> |true|F11[Return to Menu] -->F
+    
   end
-    F1 -.-> G
-    F2 --> I[Exit - Puzzle Solved]
-    B ==> H[Quit]
-	linkStyle 32 stroke:lightgreen
-	linkStyle 31 stroke:green
+    F10 -->|Else| B
+    F -.-> G
+    B e6@==> H[Quit]
+    F2 e10@==> I[Exit - Puzzle Solved]
 
 
+    classDef mainMenu stroke:red
+    classDef menuReturn stroke:orange
+    classDef exit stroke:lightgreen, animate: true 
+    class e1 mainMenu
+    class e2 mainMenu
+    class e3 mainMenu
+    class e4 mainMenu
+    class e5 mainMenu
+    class e6 exit
+    class e10 exit
+    e10@{ animate: true }
+    class e7 menuReturn
+    class e8 menuReturn
+    class e9 menuReturn
 
 ```
