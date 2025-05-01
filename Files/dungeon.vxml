@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1">
+  <var name="errorCount" expr="0"/>
+  <var name="hasKey" expr="false"/>
+
+  <!-- Wakeup Scene -->
+  <form id="wakeup">
+    <block>
+      <prompt>
+        You awaken in a damp, cold room. The smell of mildew fills the air. 
+        Stone walls surround you. It's dark... and quiet.
+      </prompt>
+    </block>
+
+    <field name="wakeChoice">
+      <prompt>
+        Do you wish to go back to sleep... or look around?
+      </prompt>
+
+      <option value="sleep">sleep</option>
+      <option value="look around">look around</option> 
+
+      <nomatch>
+        <assign name="errorCount" expr="errorCount + 1"/>
+        <if cond="errorCount &lt; 3">
+          <prompt>
+            I didn't catch that. Say "sleep" or "look around".
+          </prompt>
+          <reprompt/>
+        <else/>
+          <prompt>
+            I'm sorry, adventurer. Fate is unclear. Farewell for now.
+          </prompt>
+          <exit/>
+        </if>
+      </nomatch>
+
+      <noinput>
+        <assign name="errorCount" expr="errorCount + 1"/>
+        <if cond="errorCount &lt; 3">
+          <prompt>
+            Are you still there? Say "sleep" or "look around".
+          </prompt>
+          <reprompt/>
+        <else/>
+          <prompt>
+            Silence. And darkness takes you once more...
+          </prompt>
+          <exit/>
+        </if>
+      </noinput>
+
+      <filled>
+        <if cond="wakeChoice == 'sleep'">
+          <goto next="#sleepEnd"/>
+        <elseif cond="wakeChoice == 'look around'"/>
+          <goto next="#roomChoice"/>
+        </if>
+      </filled>
+    </field>
+  </form>
+
+  <!-- Sleep Ending -->
+  <form id="sleepEnd">
+    <block>
+      <prompt>
+        You close your eyes... and drift off. When you wake again, you're in your own bed. 
+        It was all just a dream. Or was it?
+      </prompt>
+      <exit/>
+    </block>
+  </form>
+
+  <!-- Room Exploration -->
+  <form id="roomChoice">
+    <var name="errorCount" expr="0"/>
+    <field name="roomInspect">
+      <prompt>
+        In the dim light, you can see a sturdy door and an old table. 
+        What do you want to inspect the door, or the table?
+      </prompt>
+
+      <option value="door">door</option>
+      <option value="table">table</option> 
+
+      <nomatch>
+        <assign name="errorCount" expr="errorCount + 1"/>
+        <if cond="errorCount &lt; 3">
+          <prompt>
+            The shadows blur your vision. Say "door" or "table".
+          </prompt>
+          <reprompt/>
+        <else/>
+          <prompt>
+            Lost in confusion, you sit and wait. Time passes. The adventure ends here.
+          </prompt>
+          <exit/>
+        </if>
+      </nomatch>
+
+      <noinput>
+        <assign name="errorCount" expr="errorCount + 1"/>
+        <if cond="errorCount &lt; 3">
+          <prompt>
+            The silence is eerie. Say "door" or "table".
+          </prompt>
+          <reprompt/>
+        <else/>
+          <prompt>
+            Nothing stirs. Your journey ends in stillness.
+          </prompt>
+          <exit/>
+        </if>
+      </noinput>
+
+      <filled>
+        <if cond="roomInspect == 'door'">
+          <goto next="#inspectDoor"/>
+        <elseif cond="roomInspect == 'table'"/>
+          <goto next="#inspectTable"/>
+        </if>
+      </filled>
+    </field>
+  </form>
+
+  <!-- Table Interaction -->
+  <form id="inspectTable">
+    <block>
+      <if cond="hasKey == false">
+        <prompt>
+          You approach the table. Dust and cobwebs cover its surface.
+          But something gleams beneath the dirt... a key.
+          You pick it up and pocket it.
+        </prompt>
+        <assign name="hasKey" expr="true"/>
+        <goto next="#roomChoice"/>
+      <else/>
+        <prompt>
+          The table is just as you left it. Empty, old, and quiet.
+        </prompt>
+        <goto next="#roomChoice"/>
+      </if>
+    </block>
+  </form>
+
+  <!-- Door Interaction -->
+  <form id="inspectDoor">
+    <block>
+      <if cond="hasKey == false">
+        <prompt>
+          You try the door. It’s solid... and locked. You’ll need a key.
+        </prompt>
+        <goto next="#roomChoice"/>
+      <else/>
+        <prompt>
+          You insert the key. With a rusty creak, the door swings open.
+          A narrow corridor stretches ahead.
+        </prompt>
+        <goto next="#corridorChoice"/>
+      </if>
+    </block>
+  </form>
+
+  <!-- Corridor Navigation -->
+  <form id="corridorChoice">
+    <var name="errorCount" expr="0"/>
+    <field name="direction">
+      <prompt>
+        Do you want to go left... or right?
+      </prompt>
+
+      <option value="left">left</option>
+      <option value="right">right</option> 
+
+      <nomatch>
+        <assign name="errorCount" expr="errorCount + 1"/>
+        <if cond="errorCount &lt; 3">
+          <prompt>
+            Echoes confuse you. Say "left" or "right".
+          </prompt>
+          <reprompt/>
+        <else/>
+          <prompt>
+            The dungeon claims another lost soul. Goodbye.
+          </prompt>
+          <exit/>
+        </if>
+      </nomatch>
+
+      <noinput>
+        <assign name="errorCount" expr="errorCount + 1"/>
+        <if cond="errorCount &lt; 3">
+          <prompt>
+            Say "left" or "right" to move forward.
+          </prompt>
+          <reprompt/>
+        <else/>
+          <prompt>
+            Stillness surrounds you. Your fate is sealed.
+          </prompt>
+          <exit/>
+        </if>
+      </noinput>
+
+      <filled>
+        <if cond="direction == 'left'">
+          <goto next="#deadEnd"/>
+        <elseif cond="direction == 'right'"/>
+          <goto next="#freedom"/>
+        </if>
+      </filled>
+    </field>
+  </form>
+
+  <!-- Dead End -->
+  <form id="deadEnd">
+    <block>
+      <prompt>
+        You take a few steps to the left and you walk straight into a wall.
+        That way is no good.
+      </prompt>
+      <goto next="#corridorChoice"/>
+    </block>
+  </form>
+
+  <!-- Freedom Ending -->
+  <form id="freedom">
+    <block>
+      <prompt>
+        You walk to the right. The air grows fresher.
+        Light spills in through a crack, an exit! You step into the sun. You are free.
+        Well done, adventurer.
+      </prompt>
+      <exit/>
+    </block>
+  </form>
+
+</vxml>
