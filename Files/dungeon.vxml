@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vxml version="2.1">
+  <property name="timeout" value="8s"/>
   <var name="errorCount" expr="0"/>
   <var name="hasKey" expr="false"/>
 
@@ -9,13 +10,13 @@
       <prompt>
         You awaken in a damp, cold room. The smell of mildew fills the air. 
         Stone walls surround you. It's dark... and quiet. Your head is pounding, but the pain fades slowly. 
-        You blink a couple of times as your eyes slowly get used to the dark.<break time = "8s"/>
+        You blink a couple of times as your eyes slowly get used to the dark.
       </prompt>
     </block>
 
     <field name="wakeChoice">
       <prompt>
-        Do you wish to go back to sleep... or look around?<break time = "8s"/>
+        Do you wish to go back to sleep... or look around?
       </prompt>
 
       <option value="sleep">sleep</option>
@@ -78,7 +79,7 @@
     <field name="roomInspect">
       <prompt>
         In the dim light, you can see a sturdy, wooden door and an old table. 
-        What do you want to inspect: the door, or the table?<break time = "8s"/>
+        What do you want to inspect: the door, or the table?
       </prompt>
 
       <option value="door">door</option>
@@ -167,7 +168,7 @@
     <var name="errorCount" expr="0"/>
     <field name="direction">
       <prompt>
-        Do you want to go left... or right?<break time = "8s"/>
+        Do you want to go left... or right?
       </prompt>
 
       <option value="left">left</option>
@@ -229,7 +230,7 @@
     <block>
       <prompt>
         You walk to the right. You see another door, similar to the one you just went through. 
-        As you open it and step through it, you see a second room. <break time = "8s"/>
+        As you open it and step through it, you see a second room. 
       </prompt>
       <goto next = "puzzle.vxml"/>
     </block>

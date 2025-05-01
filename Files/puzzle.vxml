@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vxml version="2.1">
+  <property name="timeout" value="20s"/>
 
   <!-- Global Variables -->
   <var name="errorCount" expr="0"/>
   <var name="knowsOrder" expr="false"/>
   <var name="codeKnown" expr="false"/>
+
   <var name="mem_west" expr="false"/>
   <var name="mem_north" expr="false"/>
   <var name="mem_east" expr="false"/>
@@ -12,154 +14,102 @@
   <!-- Entry Point -->
   <form id="entry">
     <block>
-      <prompt>
-        You enter a grand room lit by flickering torches. 
-        A lavish banquet table sits in the center. 
-        Paintings hang on the east, north, and west walls. 
-        There's a bookshelf beside the door you entered, 
-        and another locked door on the far end of the room, secured with a number padlock.
-        <break time = "8s"/>
-      </prompt>
+      <prompt>You enter a grand room lit by flickering torches.</prompt>
+      <prompt>A lavish banquet table sits in the center.</prompt>
+      <prompt>Paintings hang on the east, north, and west walls.</prompt>
+      <prompt>There's a bookshelf beside the door you entered,</prompt>
+      <prompt>and another locked door on the far end of the room, secured with a number padlock.</prompt>
       <goto next="#mainChoice"/>
     </block>
   </form>
 
-  <!-- Main Exploration Menu -->
-  <form id="mainChoice">
-    <field name="choice">
-      <prompt>
-        What would you like to inspect? You can say: table, paintings, bookshelf, or the door. 
-        You may also say "memory" to recall what you've seen.
-        <break time = "4s"/>
-      </prompt>
-      
+  <catch event="quitEvent"> <exit/>
+  </catch>
 
-       <option value="table">table</option>
-      <option value="paintings">paintings</option> 
-       <option value="bookshelf">bookshelf</option>
-      <option value="door">door</option> 
-      <option value="memory">memory</option> 
+  <menu id="mainChoice" dtmf="true">
+    <prompt timeout="10s">What would you like to inspect? <enumerate /></prompt>
 
-      <filled>
-        <if cond="choice == 'table'">
-          <goto next="#inspectTable"/>
-        <elseif cond="choice == 'paintings'"/>
-          <goto next="#paintingOverview"/>
-        <elseif cond="choice == 'bookshelf'"/>
-          <goto next="#inspectBookshelf"/>
-        <elseif cond="choice == 'door'"/>
-          <goto next="#checkDoor"/>
-        <elseif cond="choice == 'memory'"/>
-          <goto next="#recallMemory"/>
-        <else/>
-          <goto next="#mainRetry"/>
-        </if>
-      </filled>
+    <choice next="#inspectTable">table</choice>
+    <choice next="#paintingOverview">paintings</choice>
+    <choice next="#inspectBookshelf">bookshelf</choice>
+    <choice next="#checkDoor">door</choice>
+    <choice next="#recallMemory">memory</choice>
+    <choice event="quitEvent">quit</choice>
 
-      <noinput>
-        <goto next="#mainRetry"/>
-      </noinput>
+    <noinput count="3">
+      You grow silent... and time stands still.
+      <exit/>
+    </noinput>
 
-      <nomatch>
-        <goto next="#mainRetry"/>
-      </nomatch>
-    </field>
-  </form>
-
-  <!-- Retry Logic -->
-  <form id="mainRetry">
-    <block>
-      <assign name="errorCount" expr="errorCount + 1"/>
-      <if cond="errorCount &lt; 3">
-        <prompt>Please say: table, paintings, bookshelf, door, or memory. <break time = "4s"/></prompt>
-        <goto next="#mainChoice"/>
-      <else/>
-        <prompt>You grow silent... and time stands still.</prompt>
-        <exit/>
-      </if>
-    </block>
-  </form>
+    <nomatch count="3">
+      You grow silent... and time stands still.
+      <exit/>
+    </nomatch>
+  </menu>
 
   <!-- Table -->
+  
   <form id="inspectTable">
     <block>
       <prompt>
         The banquet table is ornate, set with silverware and crystal goblets.
         Roasted pheasants and golden apples sit untouched. 
         The tablecloth is embroidered with scenes of ancient battles, but there's nothing that stands out as unusual.
-      <break time = "8s"/>
       </prompt>
       <goto next="#mainChoice"/>
     </block>
   </form>
 
-  <!-- Paintings Overview -->
-  <form id="paintingOverview">
-    <field name="paintingPick">
-      <prompt>
-        You see three paintings. Do you want to look at the east, north, or west wall? Or do you want to look at something else in the room?<break time = "4s"/>
-      </prompt>
+<!-- Paintings -->
 
-      <option value="east">east</option> 
-       <option value="north">north</option>
-      <option value="west">west</option> 
-      <option value="room">room</option> 
-      <option value="memory">memory</option> 
+  <menu id="paintingOverview">
+    <prompt>
+      You see three paintings. Do you want to look at the east, north, or west wall? Or do you want to look at something else in the room?
+    </prompt>
+    <choice event="user.chose_painting_east" message="east">east</choice>
+    <choice event="user.chose_painting_north" message="north">north</choice>
+    <choice event="user.chose_painting_west" message="west">west</choice>
+    <choice next="#recallMemory">memory</choice>
 
-      <filled>
-        <if cond="paintingPick == 'east'">
-          <prompt>
-            The painting on the east wall shows an aging man in ornate silver armor. 
-            His posture is proud, his jaw square, and his eyes tired but stern. 
-            A heavy crown rests upon his head, and beneath the frame is etched: 
-            "King Alric". Scrawled faintly in the corner is the number 4.
-            <break time = "10s"/>
-          </prompt>
-          <assign name="mem_east" expr="true"/>
-          <goto next="#paintingOverview"/>
-        <elseif cond="paintingPick == 'north'"/>
-          <prompt>
-            Hanging on the north wall is a portrait of a regal woman. 
-            She wears a deep violet gown, her hair wrapped in braids like coiled snakes. 
-            One hand rests on a scroll, the other on the hilt of a jeweled dagger. 
-            The inscription reads: "Queen Berena". A number 9 is delicately painted into her necklace.
-            <break time = "10s"/>
-          </prompt>
-          <assign name="mem_north" expr="true"/>
-          <goto next="#paintingOverview"/>
-        <elseif cond="paintingPick == 'west'"/>
-          <prompt>
-            The painting on the west wall depicts a young nobleman with tousled blond hair. 
-            He smiles slightly, a falcon perched confidently on his gloved arm. 
-            He wears a green hunting cloak and boots muddy from the field. 
-            Below him is labeled: "Prince Cedric", and the number 2 is sewn into the falcon's jess.
-            <break time = "8s"/>
-          </prompt>
-          <assign name="mem_west" expr="true"/>
-          <goto next="#paintingOverview"/>
-          <elseif cond="paintingPick == 'room'"/>
-          <prompt>
-            You turn your attention back to the room.<break time = "4s"/>
-          </prompt>
-          <goto next="#mainChoice"/>
-        <elseif cond="paintingPick == 'memory'"/>
-          <goto next="#recallMemory"/>
-        <else/>
-          <goto next="#paintingOverview"/>
-        </if>
-      </filled>
+    <noinput>
+      <prompt>Say east, north, west - or memory.<break time = "4s"/></prompt>
+    </noinput>
 
-      <noinput>
-        <prompt>Say east, north, west - or memory.<break time = "4s"/></prompt>
-        <reprompt/>
-      </noinput>
+    <nomatch>
+      <prompt>I didn't catch that. Try east, north, west, or memory.<break time = "4s"/></prompt>
+    </nomatch>
+  </menu>
 
-      <nomatch>
-        <prompt>I didn't catch that. Try east, north, west, or memory.<break time = "4s"/></prompt>
-        <reprompt/>
-      </nomatch>
-    </field>
-  </form>
+  <catch event="user.chose_painting_west">
+    <prompt>The painting on the west wall depicts a young nobleman with tousled blond hair. </prompt>
+    <prompt>He smiles slightly, a falcon perched confidently on his gloved arm. </prompt>
+    <prompt>He wears a green hunting cloak and boots muddy from the field. </prompt>
+    <prompt>Below him is labeled: "Prince Cedric", and the number 2 is sewn into the falcon's jess.</prompt>
+    <assign name="mem_west" expr="true"/>
+    <goto next="#paintingOverview"/>
+  </catch>
+
+  <catch event="user.chose_painting_north">
+    <prompt>Hanging on the north wall is a portrait of a regal woman. </prompt>
+    <prompt>She wears a deep violet gown, her hair wrapped in braids like coiled snakes. </prompt>
+    <prompt>One hand rests on a scroll, the other on the hilt of a jeweled dagger. </prompt>
+    <prompt>The inscription reads: "Queen Berena". A number 9 is delicately painted into her necklace.</prompt>
+    <assign name="mem_north" expr="true"/>
+    <goto next="#paintingOverview"/>
+  </catch>
+
+  <catch event="user.chose_painting_east">
+    <!-- <prompt></prompt> -->
+    <!-- <assign name="_message" expr="application.lastresult$.interpretation"/> -->
+    <prompt>The painting on the east wall shows an aging man in ornate silver armor. </prompt>
+    <prompt>His posture is proud, his jaw square, and his eyes tired but stern. </prompt>
+    <prompt>A heavy crown rests upon his head, and beneath the frame is etched: </prompt>
+    <prompt>"King Alric". Scrawled faintly in the corner is the number 4.</prompt>
+    <assign name="mem_east" expr="true"/>
+    <goto next="#paintingOverview"/>
+  </catch>
+
+  <!-- Paintings End -->
 
   <!-- Bookshelf -->
   <form id="inspectBookshelf">
@@ -167,7 +117,6 @@
       <prompt>
         There are three books here: "Cooking for Nobles", "Legends of the Realm", and "Royal Bloodlines".
         Which do you want to look at? Or do you want to focus your attention on something else in the room?
-        <break time = "8s"/>
       </prompt>
 
     <option value="cooking for nobles">cooking for nobles</option> 
@@ -203,12 +152,12 @@
       </filled>
 
       <noinput>
-        <prompt>Please say one of the book titles or say memory.<break time = "8s"/></prompt>
+        <prompt>Please say one of the book titles or say memory.</prompt>
         <reprompt/>
       </noinput>
 
       <nomatch>
-        <prompt>Try again with one of the book titles or say memory.<break time = "8s"/></prompt>
+        <prompt>Try again with one of the book titles or say memory.</prompt>
         <reprompt/>
       </nomatch>
     </field>
@@ -220,7 +169,7 @@
         <if cond="!(mem_west || mem_north || mem_east)">
           <prompt>You don't recall any details yet.<break time = "3s"/></prompt>
         <else/>
-          <prompt>You recall the numbers you've seen:<break time = "8s"/></prompt>
+          <prompt>You recall the numbers you've seen:</prompt>
           <if cond="mem_east"><prompt>King Alric - 4</prompt></if>
           <if cond="mem_north"><prompt>Queen Berena - 9</prompt></if>
           <if cond="mem_west"><prompt>Prince Cedric - 2</prompt></if>
@@ -234,7 +183,7 @@
     <field name="codeInput">
       <prompt>
         The number padlock awaits. Say the three-digit code now.
-        Or say "memory" to recall what you've seen.<break time = "8s"/>
+        Or say "memory" to recall what you've seen.
       </prompt>
 
       <option value="memory">memory</option>
@@ -254,25 +203,25 @@
             You enter the code: 4, 9, 2... The lock beeps and clicks open.
             The door creaks ajar, and beyond it lies your freedom.
             Well done, adventurer.
-            <break time = "8s"/>
+            
           </prompt>
           <assign name="codeKnown" expr="true"/>
           <exit/>
           <elseif cond="codeInput == 'wrong order'"/>
           <prompt>
-            You are sure these must be the correct numbers, but maybe the order is wrong? Try checking the room again for more clues. <break time = "8s"/>
+            You are sure these must be the correct numbers, but maybe the order is wrong? Try checking the room again for more clues. 
           </prompt>
           <goto next="#checkDoor"/>
           <elseif cond="codeInput == 'room'"/>
           <prompt>
-            You turn your attention back to the room.<break time = "8s"/>
+            You turn your attention back to the room.
           </prompt>
           <goto next="#mainChoice"/>
         <elseif cond="codeInput == 'memory'"/>
           <goto next="#recallMemory"/>
         <else/>
           <prompt>
-            The lock buzzes angrily. That's not the right code.<break time = "8s"/>
+            The lock buzzes angrily. That's not the right code.
           </prompt>
           <goto next="#mainChoice"/>
         </if>
