@@ -5,6 +5,9 @@
   <var name="errorCount" expr="0"/>
   <var name="knowsOrder" expr="false"/>
   <var name="codeKnown" expr="false"/>
+  <var name="mem_west" expr="false"/>
+  <var name="mem_north" expr="false"/>
+  <var name="mem_east" expr="false"/>
 
   <!-- Entry Point -->
   <form id="entry">
@@ -82,7 +85,7 @@
       <prompt>
         The banquet table is ornate, set with silverware and crystal goblets.
         Roasted pheasants and golden apples sit untouched. 
-        The tablecloth is embroidered with scenes of ancient battles, but there’s nothing that stands out as unusual.
+        The tablecloth is embroidered with scenes of ancient battles, but there's nothing that stands out as unusual.
       </prompt>
       <goto next="#mainChoice"/>
     </block>
@@ -110,6 +113,7 @@
             "King Alric". Scrawled faintly in the corner is the number 4.
             <break time = "8s"/>
           </prompt>
+          <assign name="mem_east" expr="true"/>
           <goto next="#paintingOverview"/>
         <elseif cond="paintingPick == 'north'"/>
           <prompt>
@@ -119,6 +123,7 @@
             The inscription reads: "Queen Berena". A number 9 is delicately painted into her necklace.
             <break time = "8s"/>
           </prompt>
+          <assign name="mem_north" expr="true"/>
           <goto next="#paintingOverview"/>
         <elseif cond="paintingPick == 'west'"/>
           <prompt>
@@ -128,6 +133,7 @@
             Below him is labeled: "Prince Cedric", and the number 2 is sewn into the falcon's jess.
             <break time = "8s"/>
           </prompt>
+          <assign name="mem_west" expr="true"/>
           <goto next="#paintingOverview"/>
           <elseif cond="paintingPick == 'room'"/>
           <prompt>
@@ -209,10 +215,14 @@
   <!-- Recall Memory -->
   <form id="recallMemory">
     <block>
-      <prompt>
-        You recall the numbers you've seen:
-        King Alric — 4, Queen Berena — 9, Prince Cedric — 2.
-      </prompt>
+        <if cond="!(mem_west || mem_north || mem_east)">
+          <prompt>You don't recall any details yet.</prompt>
+        <else/>
+          <prompt>You recall the numbers you've seen:</prompt>
+          <if cond="mem_east"><prompt>King Alric - 4</prompt></if>
+          <if cond="mem_north"><prompt>Queen Berena - 9</prompt></if>
+          <if cond="mem_west"><prompt>Prince Cedric - 2</prompt></if>
+        </if>
       <goto next="#mainChoice"/>
     </block>
   </form>
@@ -222,7 +232,7 @@
     <field name="codeInput">
       <prompt>
         The number padlock awaits. Say the three-digit code now.
-        Or say "memory" to recall what you’ve seen.<break time = "8s"/>
+        Or say "memory" to recall what you've seen.<break time = "8s"/>
       </prompt>
 
       <option value="492">492</option> 
@@ -246,7 +256,7 @@
           <goto next="#recallMemory"/>
         <else/>
           <prompt>
-            The lock buzzes angrily. That’s not the right code.
+            The lock buzzes angrily. That's not the right code.
           </prompt>
           <goto next="#mainChoice"/>
         </if>
@@ -258,7 +268,7 @@
       </noinput>
 
       <nomatch>
-        <prompt>I didn’t get that. Try again with the code or say memory.</prompt>
+        <prompt>I didn't get that. Try again with the code or say memory.</prompt>
         <reprompt/>
       </nomatch>
     </field>
