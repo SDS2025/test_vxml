@@ -69,6 +69,79 @@ flowchart LR
 
 ```
 
+## dungeon.vxml (2nd option)
+
+```mermaid
+flowchart LR
+
+  subgraph wa1[Wakeup Scene]
+    A[Start - Wake up in dark room]
+    A --> B
+    B{Choose}
+
+    D[End: Wake in own bed]
+    D ==> End1[Exit]
+    V[Too many noinput/nomatch → Exit]
+  end
+    B -- sleep--> D
+    B --look around--> F
+    End1 ~~~ P
+    subgraph Exploration
+    F[Explore room]
+%%   subgraph re1[Room Exploration]
+    %% G{Choose: door or table}
+    W[Too many noinput/nomatch → Exit]
+
+    I --> J{Has key?}
+    H --> M{Has key?}
+    %% G --> I
+    %% G --> H
+    F --> I
+    F --> H
+    
+    subgraph Table Interaction
+        I[Inspect Table]
+        J -->|false| K[Find key, set hasKey = true]
+
+        J -->|true| L[Table empty]
+    end
+
+  subgraph Door Interaction
+    H[Inspect Door]
+    M -->|false| N[Door is locked]
+
+    M -->|true| O[Door opens to corridor]
+    
+  end
+    end
+%%   end
+    O --> P
+    %% F --> G
+
+    K --> F
+    L --> F
+
+    N --> F
+
+  subgraph Corridor
+    P{Choose direction}
+    %% P --> Q[Left]
+    %% Q --> R[Dead end, return]
+    P --Left--> R[Dead end, return]
+    R --> P
+
+    %% P --> S[Right]
+    %% S --> T[Freedom: new room]
+    P --Right--> T[Freedom: new room]
+    T --> U[Load puzzle.vxml]
+    X[Too many noinput/nomatch → Exit]
+  end
+
+    F~~~P
+  U --> End2[Next VXML]
+
+```
+
 ## puzzle.vxml
 
 ```mermaid
