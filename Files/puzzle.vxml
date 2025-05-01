@@ -218,7 +218,7 @@
         <if cond="!(mem_west || mem_north || mem_east)">
           <prompt>You don't recall any details yet.</prompt>
         <else/>
-          <prompt>You recall the numbers you've seen:</prompt>
+          <prompt>You recall the numbers you've seen:<break time = "8s"/></prompt>
           <if cond="mem_east"><prompt>King Alric - 4</prompt></if>
           <if cond="mem_north"><prompt>Queen Berena - 9</prompt></if>
           <if cond="mem_west"><prompt>Prince Cedric - 2</prompt></if>
@@ -235,8 +235,16 @@
         Or say "memory" to recall what you've seen.<break time = "8s"/>
       </prompt>
 
-      <option value="492">492</option> 
-      <option value="memory">memory</option> 
+      <option value="memory">memory</option>
+      <option value="room">room</option>
+      <option value="wrong order">924</option>
+      <option value="wrong order">942</option>
+      <option value="wrong order">429</option>
+      <option value="wrong order">249</option>
+      <option value="wrong order">294</option>
+      <option value="492">492</option>
+   
+
 
       <filled>
         <if cond="codeInput == '492'">
@@ -247,16 +255,21 @@
           </prompt>
           <assign name="codeKnown" expr="true"/>
           <exit/>
+          <elseif cond="codeInput == 'wrong order'"/>
+          <prompt>
+            You are sure these must be the correct numbers, but maybe the order is wrong? Try checking the room again for more clues. <break time = "8s"/>
+          </prompt>
+          <goto next="#checkDoor"/>
           <elseif cond="codeInput == 'room'"/>
           <prompt>
-            You turn your attention back to the room.
+            You turn your attention back to the room.<break time = "8s"/>
           </prompt>
           <goto next="#mainChoice"/>
         <elseif cond="codeInput == 'memory'"/>
           <goto next="#recallMemory"/>
         <else/>
           <prompt>
-            The lock buzzes angrily. That's not the right code.
+            The lock buzzes angrily. That's not the right code.<break time = "8s"/>
           </prompt>
           <goto next="#mainChoice"/>
         </if>
@@ -268,7 +281,7 @@
       </noinput>
 
       <nomatch>
-        <prompt>I didn't get that. Try again with the code or say memory.</prompt>
+        <prompt>This was not the correct code. The lock buzzes angrily. Maybe try remembering what you have learned so far, or try again.</prompt>
         <reprompt/>
       </nomatch>
     </field>
