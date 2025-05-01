@@ -8,13 +8,14 @@
     <block>
       <prompt>
         You awaken in a damp, cold room. The smell of mildew fills the air. 
-        Stone walls surround you. It's dark... and quiet.
+        Stone walls surround you. It's dark... and quiet. Your head is pounding, but the pain fades slowly. 
+        You blink a couple of times as your eyes slowly get used to the dark.<break time = "8s"/>
       </prompt>
     </block>
 
     <field name="wakeChoice">
       <prompt>
-        Do you wish to go back to sleep... or look around?
+        Do you wish to go back to sleep... or look around?<break time = "8s"/>
       </prompt>
 
       <option value="sleep">sleep</option>
@@ -64,7 +65,7 @@
   <form id="sleepEnd">
     <block>
       <prompt>
-        You close your eyes... and drift off. When you wake again, you're in your own bed. 
+        You close your eyes... and slowly start to drift off. When you wake again, you're in your own bed. 
         It was all just a dream. Or was it?
       </prompt>
       <exit/>
@@ -76,8 +77,8 @@
     <var name="errorCount" expr="0"/>
     <field name="roomInspect">
       <prompt>
-        In the dim light, you can see a sturdy door and an old table. 
-        What do you want to inspect the door, or the table?
+        In the dim light, you can see a sturdy, wooden door and an old table. 
+        What do you want to inspect: the door, or the table?<break time = "8s"/>
       </prompt>
 
       <option value="door">door</option>
@@ -148,7 +149,7 @@
     <block>
       <if cond="hasKey == false">
         <prompt>
-          You try the door. It’s solid... and locked. You’ll need a key.
+          You try the door. It is solid... and locked. You will need a key to open it.
         </prompt>
         <goto next="#roomChoice"/>
       <else/>
@@ -166,7 +167,7 @@
     <var name="errorCount" expr="0"/>
     <field name="direction">
       <prompt>
-        Do you want to go left... or right?
+        Do you want to go left... or right?<break time = "8s"/>
       </prompt>
 
       <option value="left">left</option>
@@ -217,7 +218,7 @@
     <block>
       <prompt>
         You take a few steps to the left and you walk straight into a wall.
-        That way is no good.
+        That way is no good. You turn around to where you came from. Once you reach the door, the same question burns in your mind once again. 
       </prompt>
       <goto next="#corridorChoice"/>
     </block>
@@ -228,7 +229,7 @@
     <block>
       <prompt>
         You walk to the right. You see another door, similar to the one you just went through. 
-        As you open it and step through it, you see a second room. 
+        As you open it and step through it, you see a second room. <break time = "8s"/>
       </prompt>
       <goto next = "puzzle.vxml"/>
     </block>
