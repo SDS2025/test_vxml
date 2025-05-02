@@ -167,14 +167,14 @@ B e5@==> F
     D[Painting Overview]
     D --> D1[Choose Painting]
 
-    D1 --> D2[East Wall - King Alric, 4]
-    D2 -->D12[Set mem_east = true] --> Eretp
+    D1 --> D2[East Wall<br>King Alric, 4]
+    D2 -->D12[/Set mem_east = true/] --> Eretp
 
-    D1 --> D3[North Wall - Queen Berena, 9]
-    D3 -->D11[Set mem_north = true] -->Eretp
+    D1 --> D3[North Wall<br>Queen Berena, 9]
+    D3 -->D11[/Set mem_north = true/] -->Eretp
 
-    D1 --> D4[West Wall - Prince Cedric, 2]
-    D4 --> D10[Set mem_west = true] -->Eretp
+    D1 --> D4[West Wall<br>Prince Cedric, 2]
+    D4 --> D10[/Set mem_west = true/] -->Eretp
     Eretp e7@-.-> D
     %% D1 --> B
     end
@@ -184,14 +184,14 @@ B e5@==> F
         E[Inspect Bookshelf]
         E --> E1[Choose Book]
 
-        E1 --> E2[Cooking for Nobles<br>_no clue_]
-        E2 --> E11[_no clue_] --> Eret
+        E1 --> E2[Cooking for Nobles]
+        E2 --> E11>_no clue_] --> Eret
 
-        E1 --> E3[Legends of the Realm<br>_no clue_]
-        E3 --> E12[_no clue_] -->Eret
+        E1 --> E3[Legends of the Realm]
+        E3 --> E12>_no clue_] -->Eret
 
         E1 --> E4[Royal Bloodlines]
-        E4 -->E10[set knowsOrder = true]--> Eret
+        E4 -->E10[/set knowsOrder = true/]--> Eret
         Eret e8@-.-> E        
 
         %% E1 --> B
@@ -211,13 +211,13 @@ B e5@==> F
     F3 --> F11
 
     F1 --> F4[Incorrect Code<br>_doesn't contain 2,4,9_]
-    F4 -->F10{mem_east<br>mem_north<br>mem_west<br>all true} --> |true|F11[Return to Menu] -->F
+    F4 -->F10{mem_east<br>mem_north<br>mem_west<br>all true} --> |true|F11[Return to Menu] e9@-.->F
     
+    F2 e10@==> I[Exit - Puzzle Solved]
   end
     F10 -->|Else| B
     F -.-> G
     B e6@==> H[Quit]
-    F2 e10@==> I[Exit - Puzzle Solved]
 
 
     classDef mainMenu stroke:red
