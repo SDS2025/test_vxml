@@ -11,7 +11,7 @@ REM ot_ccxml_interpreter -e Files/simple.ccxml
 @REM ot_vxml_interpreter.exe -e Files/menu.vxml
 @REM ot_vxml_interpreter.exe -e ../../Weihnachtsmarkt.vxml 
 pushd ..\Dialogmanager\Optimtalk
-ot_vxml_interpreter.exe -s5 -e -s0 ../../test_vxml/Files/puzzle.vxml
+ot_vxml_interpreter.exe -e ../../test_vxml/Files/dungeon.vxml
 popd
 PAUSE 
 
