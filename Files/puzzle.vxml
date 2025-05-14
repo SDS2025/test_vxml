@@ -230,7 +230,7 @@
     <nomatch>
       <prompt>This was not the correct code. The lock buzzes angrily. Maybe try remembering what you have learned so far, or try again.</prompt>
       <if cond="(mem_west &amp; mem_north &amp; mem_east)">
-        <prompt>Three numbers.. that sure sounds familiar.</prompt>
+        <prompt>Three numbers.. The ancient script reads: Only when the numbers stand apart shall the path be clear.</prompt>
         <goto next="#checkDoor"/>
       <else/>
         <goto next="#mainChoice"/>
