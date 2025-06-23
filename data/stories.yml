@@ -1,0 +1,30 @@
+version: "3.1"
+stories:
+- story: main path
+  steps:
+  - intent: greet
+  - action: utter_intro
+  - intent: inspect_table
+  - action: utter_table_description
+  - intent: inspect_painting
+  - intent: painting_east
+  - action: utter_painting_east
+  - slot_was_set:
+      - mem_east: true
+  - intent: painting_north
+  - action: utter_painting_north
+  - slot_was_set:
+      - mem_north: true
+  - intent: painting_west
+  - action: utter_painting_west
+  - slot_was_set:
+      - mem_west: true
+  - intent: inspect_bookshelf
+  - action: utter_bookshelf
+  - intent: choose_book
+  - action: action_choose_book
+  - intent: recall_memory
+  - action: action_recall_memory
+  - intent: check_door
+  - intent: enter_code
+  - action: action_enter_code

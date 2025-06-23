@@ -1,0 +1,6 @@
+version: "3.1"
+
+- rule: Return to room anytime
+  steps:
+    - intent: return_to_room
+    - action: utter_intro
